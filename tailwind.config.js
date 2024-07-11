@@ -25,6 +25,8 @@ export default {
         gumela: ["Gumela Arabic", "sans-serif"],
       },
       colors: {
+        theme: "#DC0083",
+        customSecondary: "#33FF57",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

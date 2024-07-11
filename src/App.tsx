@@ -1,12 +1,11 @@
-import { Button } from "./components/ui/button";
+import MainLayout from "./components/layout/MainLayout";
 
 const App = () => {
   return (
-    <div className="font-gumela">
-      <h1>This is App component</h1>
-      <Button>Click Me</Button>
+    <div>
+      <MainLayout />
     </div>
   );
-}
+};
 
 export default App;
