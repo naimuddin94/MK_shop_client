@@ -1,9 +1,9 @@
 import logo from "../../assets/images/logo.svg";
 // import logo from "../../assets/images/logo-5.webp";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import Container from "../custom/Container";
-import { ThemeToggle } from "../custom/ThemeToggle";
 import { Button } from "../ui/button";
+import Container from "./Container";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
   return (

@@ -1,11 +1,13 @@
-import heroImage from "../../assets/images/hero-244.webp";
-import { Button } from "../ui/button";
-import Container from "./Container";
+import heroImage from "@/assets/images/hero-244.webp";
+import Container from "@/components/shared/Container";
+import { Button } from "@/components/ui/button";
+
 
 const Hero = () => {
   return (
     <Container>
-      <section className="flex flex-col-reverse md:flex-row justify-between items-center mt-5 overflow-hidden">
+      <section className="relative flex flex-col-reverse md:flex-row justify-between items-center mt-5 overflow-hidden">
+        <div className="absolute right-0 bg-theme/20 w-96 h-96 rounded-full blur-3xl" />
         <div className="flex-1 space-y-5 py-8">
           <h1 className="text-5xl font-bold first-letter:text-theme">
             Experience the Precision of Mechanical Mastery
@@ -20,7 +22,11 @@ const Hero = () => {
           <Button variant="secondary">Shop Now</Button>
         </div>
         <div className="flex-1 relative">
-          <img src={heroImage} alt="Hero section image" className="max-h-fit md:hidden" />
+          <img
+            src={heroImage}
+            alt="Hero section image"
+            className="max-h-fit md:hidden"
+          />
           <img
             src={heroImage}
             alt="Hero section image"
