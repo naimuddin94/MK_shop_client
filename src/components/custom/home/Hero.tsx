@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <Container>
       <section className="relative flex flex-col-reverse md:flex-row justify-between items-center mt-5 overflow-hidden">
-        <div className="absolute right-0 bg-theme/20 w-96 h-96 rounded-full blur-3xl" />
+        <div className="absolute right-0 bg-theme/15 w-96 h-96 rounded-full blur-3xl" />
         <div className="flex-1 space-y-5 py-8">
           <h1 className="text-5xl font-bold first-letter:text-theme">
             Experience the Precision of Mechanical Mastery
