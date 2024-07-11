@@ -5,7 +5,7 @@ import Container from "./Container";
 const Hero = () => {
   return (
     <Container>
-      <section className="flex justify-between items-center mt-5 overflow-hidden">
+      <section className="flex flex-col-reverse md:flex-row justify-between items-center mt-5 overflow-hidden">
         <div className="flex-1 space-y-5 py-8">
           <h1 className="text-5xl font-bold first-letter:text-theme">
             Experience the Precision of Mechanical Mastery
@@ -20,15 +20,17 @@ const Hero = () => {
           <Button variant="secondary">Shop Now</Button>
         </div>
         <div className="flex-1 relative">
+          <img src={heroImage} alt="Hero section image" className="max-h-fit md:hidden" />
           <img
             src={heroImage}
             alt="Hero section image"
-            className="max-h-fit absolute -rotate-45 bottom-10"
+            className="max-h-fit absolute -rotate-45 bottom-10 opacity-10 md:opacity-100"
           />
+
           <img
             src={heroImage}
             alt="Hero section image"
-            className="max-h-fit absolute -rotate-45 -right-6"
+            className="max-h-fit hidden md:flex absolute -rotate-45 -right-6"
           />
         </div>
       </section>
