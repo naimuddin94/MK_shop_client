@@ -20,25 +20,25 @@ export const adminNavItems: navItem[] = [
     children: [
       {
         title: "Add Brand",
-        href: "/add-brand",
+        href: "/dashboard/add-brand",
         description:
           "A modal dialog that interrupts the user with important content and expects a response.",
       },
       {
         title: "Add Product",
-        href: "/add-product",
+        href: "/dashboard/add-product",
         description:
           "For sighted users to preview content available behind a link.",
       },
       {
         title: "Carts",
-        href: "/carts",
+        href: "/dashboard/carts",
         description:
           "For sighted users to preview content available behind a link.",
       },
       {
         title: "Ratings",
-        href: "/ratings",
+        href: "/dashboard/ratings",
         description:
           "For sighted users to preview content available behind a link.",
       },
@@ -54,7 +54,6 @@ export const adminNavItems: navItem[] = [
   },
 ];
 
-
 export const userNavItems: navItem[] = [
   {
     label: "Home",
@@ -69,25 +68,25 @@ export const userNavItems: navItem[] = [
     children: [
       {
         title: "Profile",
-        href: "/profile",
+        href: "/dashboard/profile",
         description:
           "A modal dialog that interrupts the user with important content and expects a response.",
       },
       {
         title: "My Orders",
-        href: "/my-orders",
+        href: "/dashboard/my-orders",
         description:
           "For sighted users to preview content available behind a link.",
       },
       {
         title: "Carts",
-        href: "/carts",
+        href: "/dashboard/carts",
         description:
           "For sighted users to preview content available behind a link.",
       },
       {
         title: "Ratings",
-        href: "/ratings",
+        href: "/dashboard/ratings",
         description:
           "For sighted users to preview content available behind a link.",
       },

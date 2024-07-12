@@ -1,6 +1,6 @@
 import { adminNavItems, navItem, userNavItems } from "@/utils/navtems";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ListItem } from "../ui/ListItem";
 import {
   NavigationMenu,
@@ -12,22 +12,29 @@ import {
 } from "../ui/navigation-menu";
 
 const NavMenus = () => {
+  const { pathname } = useLocation();
   const [menus, setMenus] = useState<navItem[]>(userNavItems);
-  const [role, setRole] = useState("user");
+  const [role, setRole] = useState("admin");
   useEffect(() => {
     if (role === "admin") {
       setMenus(adminNavItems);
     }
   }, [role]);
   return (
-    <ul className="hidden md:flex items-center gap-5">
+    <ul className="hidden md:flex items-center gap-5 py-3">
       <NavigationMenu>
-        <NavigationMenuItem className="space-x-1">
+        <NavigationMenuItem>
           {menus?.map((menu) => {
             if (menu.href) {
               return (
                 <Link to={menu.href} key={menu.label}>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink
+                    className={`${navigationMenuTriggerStyle()} ${
+                      pathname === menu.href
+                        ? "border border-theme/40 bg-transparent"
+                        : "bg-transparent"
+                    }`}
+                  >
                     {menu.label}
                   </NavigationMenuLink>
                 </Link>
@@ -35,7 +42,15 @@ const NavMenus = () => {
             } else if (menu.children) {
               return (
                 <React.Fragment key={menu.label}>
-                  <NavigationMenuTrigger>Dashboard</NavigationMenuTrigger>
+                  <NavigationMenuTrigger
+                    className={
+                      pathname.includes("dashboard")
+                        ? "border border-theme/40 bg-transparent"
+                        : "bg-transparent"
+                    }
+                  >
+                    Dashboard
+                  </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                       {menu.children?.map((component) => (
