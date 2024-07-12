@@ -1,7 +1,7 @@
 import heroImage from "@/assets/images/hero-244.webp";
 import Container from "@/components/shared/Container";
 import { Button } from "@/components/ui/button";
-
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -19,7 +19,9 @@ const Hero = () => {
             performance. Elevate your workflow and enjoy every keystroke with
             our top-tier selection.
           </p>
-          <Button variant="secondary">Shop Now</Button>
+          <Link to="/products">
+            <Button variant="secondary">Shop Now</Button>
+          </Link>
         </div>
         <div className="flex-1 relative">
           <img
