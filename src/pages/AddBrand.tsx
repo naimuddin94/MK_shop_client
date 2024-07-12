@@ -1,3 +1,4 @@
+import Loader from "@/components/shared/Loader";
 import PaginationComponent from "@/components/shared/PaginationComponent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,63 +11,79 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { toast } from "@/components/ui/use-toast";
+import { useAddBrandMutation, useFetchBrandsQuery } from "@/redux/api/brandApi";
+import { TBrand } from "@/Types";
 import { useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 
 function AddBrand() {
-  const [brands, setBrands] = useState([
-    { id: 1, name: "Nike", origin: "United States" },
-    { id: 2, name: "Adidas", origin: "Germany" },
-    { id: 3, name: "Gucci", origin: "Italy" },
-    { id: 4, name: "Uniqlo", origin: "Japan" },
-  ]);
-  const [newBrand, setNewBrand] = useState({
-    name: "",
-    origin: "",
-  });
-  const handleInputChange = (e) => {
-    setNewBrand((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+  const [page, setPage] = useState(1);
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+    reset,
+  } = useForm();
+
+  const [addBrandFn] = useAddBrandMutation();
+  const { data, isLoading } = useFetchBrandsQuery({ page, limit: 5 });
+
+  const onSubmit = async (data: FieldValues) => {
+    await addBrandFn(data)
+      .unwrap()
+      .then((res) => {
+        if (res?.statusCode === 201) {
+          toast({
+            title: res?.message,
+            duration: 2000,
+          });
+          reset();
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: error?.data?.message,
+          duration: 2000,
+        });
+      });
   };
-  const handleAddBrand = () => {
-    if (newBrand.name.trim() && newBrand.origin.trim()) {
-      setBrands((prevBrands) => [
-        ...prevBrands,
-        { id: prevBrands.length + 1, ...newBrand },
-      ]);
-      setNewBrand({ name: "", origin: "" });
-    }
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
   };
+
+  if (isLoading) {
+    return <Loader size={200} />;
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 md:p-8">
       <div className="bg-background rounded-lg shadow-sm p-6">
         <h2 className="text-2xl font-bold mb-4">Add New Brand</h2>
-        <div className="grid gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
           <div>
             <Label htmlFor="name">Brand Name</Label>
             <Input
               id="name"
-              name="name"
               type="text"
               placeholder="Enter brand name"
-              value={newBrand.name}
-              onChange={handleInputChange}
+              {...register("name")}
             />
           </div>
           <div>
             <Label htmlFor="origin">Brand Origin</Label>
             <Input
               id="origin"
-              name="origin"
               type="text"
               placeholder="Enter brand origin"
-              value={newBrand.origin}
-              onChange={handleInputChange}
+              {...register("origin")}
             />
           </div>
-          <Button onClick={handleAddBrand}>Add Brand</Button>
-        </div>
+          <Button type="submit">
+            {isSubmitting ? <Loader size={28} /> : "Add Brand"}
+          </Button>
+        </form>
       </div>
       <div className="bg-background rounded-lg shadow-sm p-6">
         <h2 className="text-2xl font-bold mb-4">Existing Brands</h2>
@@ -78,15 +95,18 @@ function AddBrand() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {brands.map((brand) => (
-              <TableRow key={brand.id}>
+            {data?.data?.result?.map((brand: TBrand) => (
+              <TableRow key={brand._id}>
                 <TableCell>{brand.name}</TableCell>
                 <TableCell>{brand.origin}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        <PaginationComponent />
+        <PaginationComponent
+          meta={data?.data?.meta}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

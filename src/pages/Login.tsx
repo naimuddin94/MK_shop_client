@@ -9,17 +9,62 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { LucideEye, LucideEyeOff } from "lucide-react";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm({
+    defaultValues: {
+      email: "smith@gmail.com",
+      password: "password123",
+    },
+  });
+
+  const [loginFn] = useLoginMutation();
+
+  const onSubmit = async (data: FieldValues) => {
+    await loginFn(data)
+      .unwrap()
+      .then((res) => {
+        if (res?.statusCode === 200) {
+          const user = {
+            userId: res?.data?._id,
+            role: res?.data?.role,
+            email: res?.data?.email,
+            image: res?.data?.image,
+          };
+          const token = res?.token;
+
+          dispatch(setUser({ user, token }));
+          navigate("/");
+          toast({
+            title: res?.message,
+            duration: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: error?.data?.message,
+          duration: 2000,
+        });
+      });
   };
   return (
     <section className="flex justify-center items-center min-h-screen">
@@ -72,8 +117,9 @@ function Login() {
               variant="outline"
               type="submit"
               className="w-full border-theme/40"
+              disabled={isSubmitting}
             >
-              Login
+              {isSubmitting ? <Loader size={28} /> : "Login"}
             </Button>
           </CardFooter>
           <Link

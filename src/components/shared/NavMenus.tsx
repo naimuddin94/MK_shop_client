@@ -1,3 +1,5 @@
+import { currentUser } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { adminNavItems, navItem, userNavItems } from "@/utils/navtems";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -14,12 +16,12 @@ import {
 const NavMenus = () => {
   const { pathname } = useLocation();
   const [menus, setMenus] = useState<navItem[]>(userNavItems);
-  const [role, setRole] = useState("admin");
+  const user = useAppSelector(currentUser);
   useEffect(() => {
-    if (role === "admin") {
+    if (user?.role === "admin") {
       setMenus(adminNavItems);
     }
-  }, [role]);
+  }, [user]);
   return (
     <ul className="hidden md:flex items-center gap-5 py-3">
       <NavigationMenu>

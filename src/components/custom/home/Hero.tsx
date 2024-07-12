@@ -12,7 +12,7 @@ const Hero = () => {
           <h1 className="first-letter:text-theme text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
             Experience the Precision of Mechanical Mastery
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground pb-5">
             Discover the ultimate typing experience with our premium mechanical
             keyboards. Engineered for professionals and enthusiasts, our
             keyboards combine unmatched durability, sleek design, and superior
