@@ -14,6 +14,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { useAddBrandMutation, useFetchBrandsQuery } from "@/redux/api/brandApi";
 import { TBrand } from "@/Types";
+import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
@@ -27,7 +28,7 @@ function AddBrand() {
   } = useForm();
 
   const [addBrandFn] = useAddBrandMutation();
-  const { data, isLoading } = useFetchBrandsQuery({ page, limit: 5 });
+  const { data, isLoading } = useFetchBrandsQuery({ page, limit: 3 });
 
   const onSubmit = async (data: FieldValues) => {
     await addBrandFn(data)
@@ -92,6 +93,7 @@ function AddBrand() {
             <TableRow>
               <TableHead>Brand Name</TableHead>
               <TableHead>Brand Origin</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -99,6 +101,11 @@ function AddBrand() {
               <TableRow key={brand._id}>
                 <TableCell>{brand.name}</TableCell>
                 <TableCell>{brand.origin}</TableCell>
+                <TableCell>
+                  <Button variant="ghost" size="sm">
+                    <Trash2 size={20} className="text-theme/90" />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
