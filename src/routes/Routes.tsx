@@ -1,4 +1,5 @@
 import MainLayout from "@/components/layout/MainLayout";
+import Contact from "@/pages/Contact";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Products from "@/pages/Products";
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
       {
         path: "/products",
         element: <Products />,
+      },
+      {
+        path: "/contact-us",
+        element: <Contact />,
       },
     ],
   },

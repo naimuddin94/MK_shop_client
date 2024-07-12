@@ -2,6 +2,7 @@ import Container from "@/components/shared/Container";
 import Heading from "@/components/shared/Heading";
 import ProductCard from "@/components/shared/ProductCard";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const HomeProduct = () => {
   return (
@@ -15,7 +16,11 @@ const HomeProduct = () => {
           <ProductCard />
         </div>
         <div className="flex justify-center">
-          <Button variant="outline" className="border-theme/30">Show All Products</Button>
+          <Link to="/products">
+            <Button variant="outline" className="border-theme/30">
+              Show All Products
+            </Button>
+          </Link>
         </div>
       </section>
     </Container>
