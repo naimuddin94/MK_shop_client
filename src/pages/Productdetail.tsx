@@ -1,24 +1,35 @@
 import Loader from "@/components/shared/Loader";
+import PaginationComponent from "@/components/shared/PaginationComponent";
 import Rating from "@/components/shared/Rating";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ReviewCard from "@/components/shared/ReviewCard";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFetchSingleProductQuery } from "@/redux/api/productApi";
-import { StarIcon } from "lucide-react";
+import { useFetchRatingsByProductIdQuery } from "@/redux/api/ratingApi";
+import { TRating } from "@/Types";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 function ProductDetail() {
   const { id } = useParams();
+  const [page, setPage] = useState(1);
 
   const { data, isLoading } = useFetchSingleProductQuery(id);
+  const { data: ratingData, isLoading: ratingLoading } =
+    useFetchRatingsByProductIdQuery({
+      id,
+      param: { page, limit: 2, sort: "-updateAt" },
+    });
 
-  if (isLoading) {
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  };
+
+  if (isLoading || ratingLoading) {
     return <Loader size={200} />;
   }
 
-  const { _id, name, brand, image, description, price, rating } = data.data;
-
-  console.log(rating);
+  const { name, brand, image, description, price, rating } = data.data;
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8 max-w-6xl">
@@ -34,7 +45,7 @@ function ProductDetail() {
           <div className="space-y-2">
             <div className="flex justify-between items-start">
               <h1 className="text-3xl font-bold">{name}</h1>
-              <Rating rating={rating}/>
+              <Rating rating={rating} />
             </div>
             <p className="text-2xl font-bold text-primary">$ {price}</p>
             <Button size="lg" className="mt-4">
@@ -86,69 +97,27 @@ function ProductDetail() {
                 <div className="grid gap-2">
                   <h2 className="text-xl font-bold">Customer Reviews</h2>
                   <div className="grid gap-6">
-                    <div className="flex gap-4">
-                      <Avatar className="w-10 h-10 border">
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      <div className="grid gap-4">
-                        <div className="flex gap-4 items-start">
-                          <div className="grid gap-0.5 text-sm">
-                            <h3 className="font-semibold">Sarah Johnson</h3>
-                            <time className="text-sm text-muted-foreground">
-                              2 days ago
-                            </time>
-                          </div>
-                          <div className="flex items-center gap-0.5 ml-auto">
-                            <StarIcon className="w-5 h-5 fill-primary" />
-                            <StarIcon className="w-5 h-5 fill-primary" />
-                            <StarIcon className="w-5 h-5 fill-primary" />
-                            <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                            <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                          </div>
-                        </div>
-                        <div className="text-sm leading-loose text-muted-foreground">
-                          <p>
-                            I've been wearing this t-shirt for a few weeks now
-                            and it's been a great addition to my wardrobe. The
-                            fabric is soft and comfortable, and the prism design
-                            is really eye-catching.
-                          </p>
-                        </div>
+                    {ratingData?.data?.result?.length ? (
+                      ratingData?.data?.result?.map((ratingInfo: TRating) => (
+                        <ReviewCard
+                          key={ratingInfo._id}
+                          ratingInfo={ratingInfo}
+                        />
+                      ))
+                    ) : (
+                      <div>
+                        <p>No review yet !</p>
                       </div>
-                    </div>
-                    <div className="flex gap-4">
-                      <Avatar className="w-10 h-10 border">
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      <div className="grid gap-4">
-                        <div className="flex gap-4 items-start">
-                          <div className="grid gap-0.5 text-sm">
-                            <h3 className="font-semibold">Alex Smith</h3>
-                            <time className="text-sm text-muted-foreground">
-                              3 weeks ago
-                            </time>
-                          </div>
-                          <div className="flex items-center gap-0.5 ml-auto">
-                            <StarIcon className="w-5 h-5 fill-primary" />
-                            <StarIcon className="w-5 h-5 fill-primary" />
-                            <StarIcon className="w-5 h-5 fill-primary" />
-                            <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                            <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                          </div>
-                        </div>
-                        <div className="text-sm leading-loose text-muted-foreground">
-                          <p>
-                            The Acme Prism T-Shirt is a great quality product.
-                            The fabric is durable and the fit is true to size.
-                            I've washed it several times and it's held up really
-                            well.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    )}
                   </div>
+                  {ratingData?.data?.meta?.totalPage > 1 && (
+                    <div className="flex justify-center mt-8">
+                      <PaginationComponent
+                        meta={ratingData?.data?.meta}
+                        onPageChange={handlePageChange}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </TabsContent>

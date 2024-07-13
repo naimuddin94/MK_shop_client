@@ -17,12 +17,19 @@ const ratingApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["rating"],
     }),
-    fetchRatingsByProductId: builder.mutation({
-      query: (id) => ({
-        url: `/ratings/product/${id}`,
-        method: "GET",
-      }),
-      invalidatesTags: ["rating"],
+    fetchRatingsByProductId: builder.query({
+      query: ({ id, param }) => {
+        const params = new URLSearchParams();
+
+        for (const key in param) {
+          params.append(key, param[key]);
+        }
+        return {
+          url: `/ratings/product/${id}`,
+          method: "GET",
+          params: params,
+        };
+      },
     }),
   }),
 });
@@ -30,5 +37,5 @@ const ratingApi = baseApi.injectEndpoints({
 export const {
   useFetchRatingsQuery,
   useAddRatingMutation,
-  useFetchRatingsByProductIdMutation,
+  useFetchRatingsByProductIdQuery,
 } = ratingApi;
