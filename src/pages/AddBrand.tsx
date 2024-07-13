@@ -13,7 +13,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "@/components/ui/use-toast";
-import { useAddBrandMutation, useFetchBrandsQuery } from "@/redux/api/brandApi";
+import {
+  useAddBrandMutation,
+  useDeleteBrandMutation,
+  useFetchBrandsQuery,
+} from "@/redux/api/brandApi";
 import { TBrand } from "@/Types";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -56,11 +60,26 @@ function AddBrand() {
     setPage(page);
   };
 
-   const handleBrandDelete = (brandId: string) => {
-     // Implement your delete logic here
-     console.log("Deleting brand with ID:", brandId);
-     // e.g., make an API call to delete the brand
-   };
+  const [deleteBrandFn] = useDeleteBrandMutation();
+
+  const handleBrandDelete = async (brandId: string) => {
+    await deleteBrandFn(brandId)
+      .unwrap()
+      .then((res) => {
+        if (res?.statusCode === 200) {
+          toast({
+            title: res?.message,
+            duration: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: error?.data?.message,
+          duration: 2000,
+        });
+      });
+  };
 
   if (isLoading) {
     return <Loader size={200} />;
