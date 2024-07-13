@@ -1,19 +1,30 @@
 import Container from "@/components/shared/Container";
 import Heading from "@/components/shared/Heading";
+import Loader from "@/components/shared/Loader";
 import ProductCard from "@/components/shared/ProductCard";
 import { Button } from "@/components/ui/button";
+import { useFetchProductsQuery } from "@/redux/api/productApi";
+import { TProduct } from "@/Types";
 import { Link } from "react-router-dom";
 
 const HomeProduct = () => {
+  const { data, isLoading } = useFetchProductsQuery({
+    page: 1,
+    limit: 4,
+    sort: "rating",
+  });
+
+  if (isLoading) {
+    return <Loader size={200} />;
+  }
   return (
     <Container>
       <section className="space-y-8 my-8">
         <Heading>Keyboards</Heading>
-        <div className="flex flex-col md:flex-row gap-5">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          {data?.data?.result?.map((product: TProduct) => (
+            <ProductCard product={product} />
+          ))}
         </div>
         <div className="flex justify-center">
           <Link to="/products">

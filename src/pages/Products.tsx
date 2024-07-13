@@ -1,4 +1,5 @@
 import Container from "@/components/shared/Container";
+import Loader from "@/components/shared/Loader";
 import PaginationComponent from "@/components/shared/PaginationComponent";
 import ProductCard from "@/components/shared/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -14,9 +15,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { FilterIcon, ListOrderedIcon } from "lucide-react";
+import { useFetchProductsQuery } from "@/redux/api/productApi";
+import { TProduct } from "@/Types";
+import { FilterIcon, FilterXIcon, ListOrderedIcon } from "lucide-react";
+import { useState } from "react";
 
 function Products() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sort, setSort] = useState("stock");
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useFetchProductsQuery({
+    page,
+    limit: 8,
+    sort,
+    searchTerm,
+  });
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  };
+
+  const handleSort = (sort: string) => {
+    setSort(sort);
+  };
+
+  const handleClearFilter = () => {
+    setSort("stock");
+    setSearchTerm("");
+  };
+
+  if (isLoading) {
+    return <Loader size={200} />;
+  }
+
   return (
     <Container className="my-8">
       <div className="flex flex-col md:flex-row items-center justify-between mb-6">
@@ -24,11 +54,10 @@ function Products() {
           <Input
             type="search"
             placeholder="Search products..."
-            //   value={searchTerm}
-            //   onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full"
           />
-          <Button variant="outline">Search</Button>
         </div>
         <div className="flex items-center gap-4">
           <DropdownMenu>
@@ -94,32 +123,33 @@ function Products() {
             <DropdownMenuContent align="end" className="w-64">
               <DropdownMenuLabel>Sort by</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem onClick={() => handleSort("price")}>
                 Price: Low to High
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem onClick={() => handleSort("-price")}>
                 Price: High to Low
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem onClick={() => handleSort("-rating")}>
                 Rating: High to Low
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Newest</DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <Button variant="outline">
+            <FilterXIcon onClick={handleClearFilter} className="h-4 w-4 mr-2" />
+            Clear
+          </Button>
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+        {data?.data?.result?.map((product: TProduct) => (
+          <ProductCard product={product} />
+        ))}
       </div>
       <div className="flex justify-center mt-8">
-        <PaginationComponent />
+        <PaginationComponent
+          meta={data?.data?.meta}
+          onPageChange={handlePageChange}
+        />
       </div>
     </Container>
   );

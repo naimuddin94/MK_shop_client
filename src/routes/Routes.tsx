@@ -6,6 +6,7 @@ import Contact from "@/pages/Contact";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import MyOrders from "@/pages/MyOrders";
+import ProductDetail from "@/pages/Productdetail";
 import Products from "@/pages/Products";
 import Register from "@/pages/Register";
 import { createBrowserRouter } from "react-router-dom";
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/add-brand",
         element: <AddBrand />,
+      },
+      {
+        path: "/product/:id",
+        element: <ProductDetail />,
       },
     ],
   },

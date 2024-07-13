@@ -5,32 +5,36 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import keyboard from "@/assets/images/202403060016155.png"; 
+import { TProduct } from "@/Types";
+import { Link } from "react-router-dom";
 
-function ProductCard() {
+function ProductCard({ product }: { product: TProduct }) {
+  const { _id, name, image, description, brand,  price } = product;
   return (
-    <Card className="w-full max-w-md hover:shadow hover:shadow-theme/50 duration-500">
-      <img
-        src={keyboard}
-        alt="Mechanical Keyboard"
-
-        className="rounded-t-lg object-cover w-full aspect-[4/3]"
-      />
-      <CardContent className="p-6 space-y-4">
-        <div className="space-y-2">
-          <CardTitle className="text-xl font-bold">
-            Mechanical Keyboard
-          </CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Tactile and responsive typing experience with Cherry MX switches.
-          </CardDescription>
+    <Link to={`/product/${_id}`} className="flex flex-col h-full">
+      <Card className="w-full flex flex-col justify-between max-w-md hover:shadow hover:shadow-theme/50 duration-500 flex-grow">
+        <div className="p-4 flex-1">
+          <img
+            src={image}
+            alt="Mechanical Keyboard"
+            className="rounded-t-lg object-cover w-full aspect-[4/3]"
+          />
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold">$99</span>
-          <Button variant="outline">Add to Cart</Button>
-        </div>
-      </CardContent>
-    </Card>
+        <CardContent className="p-6 space-y-4 flex-1 flex flex-col justify-between">
+          <div className="space-y-2">
+            <CardTitle className="text-xl font-bold">{name}</CardTitle>
+            <CardDescription className="text-muted-foreground">
+              {description.slice(0, 50)}
+            </CardDescription>
+            <CardTitle className="text-md font-semibold">{brand.name}</CardTitle>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-2xl font-bold">${price}</span>
+            <Button variant="outline">Add to Cart</Button>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
   );
 }
 
