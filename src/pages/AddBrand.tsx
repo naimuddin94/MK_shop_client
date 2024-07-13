@@ -1,3 +1,4 @@
+import AlertModel from "@/components/shared/AlertModel";
 import Loader from "@/components/shared/Loader";
 import PaginationComponent from "@/components/shared/PaginationComponent";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ import { FieldValues, useForm } from "react-hook-form";
 
 function AddBrand() {
   const [page, setPage] = useState(1);
+
   const {
     register,
     handleSubmit,
@@ -28,7 +30,7 @@ function AddBrand() {
   } = useForm();
 
   const [addBrandFn] = useAddBrandMutation();
-  const { data, isLoading } = useFetchBrandsQuery({ page, limit: 3 });
+  const { data, isLoading } = useFetchBrandsQuery({ page, limit: 5 });
 
   const onSubmit = async (data: FieldValues) => {
     await addBrandFn(data)
@@ -53,6 +55,12 @@ function AddBrand() {
   const handlePageChange = (page: number) => {
     setPage(page);
   };
+
+   const handleBrandDelete = (brandId: string) => {
+     // Implement your delete logic here
+     console.log("Deleting brand with ID:", brandId);
+     // e.g., make an API call to delete the brand
+   };
 
   if (isLoading) {
     return <Loader size={200} />;
@@ -102,9 +110,12 @@ function AddBrand() {
                 <TableCell>{brand.name}</TableCell>
                 <TableCell>{brand.origin}</TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm">
-                    <Trash2 size={20} className="text-theme/90" />
-                  </Button>
+                  <AlertModel onConfirm={() => handleBrandDelete(brand._id)}>
+                    <Trash2
+                      size={20}
+                      className="text-theme/90 cursor-pointer hover:text-theme"
+                    />
+                  </AlertModel>
                 </TableCell>
               </TableRow>
             ))}
