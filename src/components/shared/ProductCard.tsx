@@ -5,17 +5,12 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import { useFetchRatingsByProductIdQuery } from "@/redux/api/ratingApi";
 import { TProduct } from "@/Types";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 
 function ProductCard({ product }: { product: TProduct }) {
   const { _id, name, image, description, brand, price, rating } = product;
-  const { data: ratingData } = useFetchRatingsByProductIdQuery({
-    id: _id,
-    param: { page: 1, limit: 1 },
-  });
 
   return (
     <Link to={`/product/${_id}`} className="flex flex-col h-full">
@@ -31,9 +26,6 @@ function ProductCard({ product }: { product: TProduct }) {
           <div className="space-y-2">
             <div className="flex items-center justify-end gap-3">
               <Rating rating={rating} />
-              <p className="text-muted-foreground text-lg">
-                {ratingData?.data?.meta?.total}
-              </p>
             </div>
             <CardTitle className="text-xl font-bold">{name}</CardTitle>
             <CardDescription className="text-muted-foreground">

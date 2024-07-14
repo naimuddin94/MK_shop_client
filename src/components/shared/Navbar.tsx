@@ -64,9 +64,14 @@ const Navbar = () => {
         <div className="flex items-center gap-5">
           {user ? (
             <>
-              <Button variant="ghost">
-                <MdOutlineShoppingCart size={20} />
-              </Button>
+              <Link to="/dashboard/carts">
+                <div className="relative">
+                  <Button variant="ghost">
+                    <MdOutlineShoppingCart size={20} />
+                  </Button>
+                  <span className="absolute right-2">0</span>
+                </div>
+              </Link>
               <ThemeToggle />
               <Button onClick={handleLogout} variant="outline">
                 Logout

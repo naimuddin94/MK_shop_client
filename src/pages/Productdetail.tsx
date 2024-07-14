@@ -49,8 +49,11 @@ function ProductDetail() {
           <div className="space-y-2">
             <div className="flex justify-between items-start">
               <h1 className="text-3xl font-bold">{name}</h1>
-              <div className="mt-1.5">
+              <div className="mt-1.5 flex items-center gap-2">
                 <Rating rating={rating} />
+                <p className="text-muted-foreground text-lg">
+                  {ratingData?.data?.meta?.total}
+                </p>
               </div>
             </div>
             <p className="text-2xl font-bold text-primary">$ {price}</p>
