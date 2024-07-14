@@ -41,6 +41,10 @@ export const router = createBrowserRouter([
         element: <AddProduct />,
       },
       {
+        path: "/dashboard/edit-product/:id",
+        element: <AddProduct />,
+      },
+      {
         path: "/dashboard/add-brand",
         element: <AddBrand />,
       },

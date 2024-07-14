@@ -11,7 +11,7 @@ const HomeProduct = () => {
   const { data, isLoading } = useFetchProductsQuery({
     page: 1,
     limit: 4,
-    sort: "rating",
+    sort: "-rating",
   });
 
   if (isLoading) {
@@ -20,7 +20,7 @@ const HomeProduct = () => {
   return (
     <Container>
       <section className="space-y-8 my-8">
-        <Heading>Keyboards</Heading>
+        <Heading>Top Keyboards</Heading>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {data?.data?.result?.map((product: TProduct) => (
             <ProductCard product={product} />

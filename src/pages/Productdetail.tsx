@@ -1,3 +1,4 @@
+import Container from "@/components/shared/Container";
 import Loader from "@/components/shared/Loader";
 import PaginationComponent from "@/components/shared/PaginationComponent";
 import Rating from "@/components/shared/Rating";
@@ -6,12 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFetchSingleProductQuery } from "@/redux/api/productApi";
 import { useFetchRatingsByProductIdQuery } from "@/redux/api/ratingApi";
+import { currentUser } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { TRating } from "@/Types";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function ProductDetail() {
   const { id } = useParams();
+  const user = useAppSelector(currentUser);
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useFetchSingleProductQuery(id);
@@ -29,10 +33,10 @@ function ProductDetail() {
     return <Loader size={200} />;
   }
 
-  const { name, brand, image, description, price, rating } = data.data;
+  const { _id, name, brand, image, description, price, rating } = data.data;
 
   return (
-    <div className="container mx-auto px-4 md:px-6 py-8 max-w-6xl">
+    <Container className="py-8 max-w-6xl">
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <img
@@ -45,12 +49,28 @@ function ProductDetail() {
           <div className="space-y-2">
             <div className="flex justify-between items-start">
               <h1 className="text-3xl font-bold">{name}</h1>
-              <Rating rating={rating} />
+              <div className="mt-1.5">
+                <Rating rating={rating} />
+              </div>
             </div>
             <p className="text-2xl font-bold text-primary">$ {price}</p>
-            <Button size="lg" className="mt-4">
-              Add to Cart
-            </Button>
+
+            {user?.role == "admin" ? (
+              <div className="space-x-4">
+                <Button size="lg" variant="outline" className="mt-4">
+                  Add to Cart
+                </Button>
+                <Link to={`/dashboard/edit-product/${_id}`}>
+                  <Button size="lg" variant="secondary" className="mt-4">
+                    Edit Product
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <Button size="lg" className="mt-4">
+                Add to Cart
+              </Button>
+            )}
           </div>
           <Tabs defaultValue="specification">
             <TabsList className="border-b">
@@ -174,7 +194,7 @@ function ProductDetail() {
           </Tabs>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }
 

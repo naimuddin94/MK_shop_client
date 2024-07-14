@@ -49,7 +49,7 @@ function Products() {
 
   return (
     <Container className="my-8">
-      <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-5">
         <div className="w-full md:w-1/2 mb-4 md:mb-0 flex gap-4">
           <Input
             type="search"
@@ -140,17 +140,27 @@ function Products() {
           </Button>
         </div>
       </div>
+      {data?.data?.meta?.total > 8 && (
+        <div className="mb-4">
+          <p className="text-muted-foreground w-fit">
+            Total {data?.data?.meta?.total} products found
+          </p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {data?.data?.result?.map((product: TProduct) => (
           <ProductCard product={product} />
         ))}
       </div>
-      <div className="flex justify-center mt-8">
-        <PaginationComponent
-          meta={data?.data?.meta}
-          onPageChange={handlePageChange}
-        />
-      </div>
+      {data?.data?.meta?.total > 8 && (
+        <div className="flex justify-center mt-8">
+          <PaginationComponent
+            meta={data?.data?.meta}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </Container>
   );
 }
