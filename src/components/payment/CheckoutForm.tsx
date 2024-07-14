@@ -1,41 +1,50 @@
+import { useCreateOrderMutation } from "@/redux/api/ordersApi";
 import { currentUser } from "@/redux/features/auth/authSlice";
-import { useAppSelector } from "@/redux/hooks";
 import {
-  CardElement,
-  PaymentElement,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
+  clearCart,
+  currentCart,
+  removeConfirmOrders,
+} from "@/redux/features/cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { FormEvent, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Container from "../shared/Container";
+import Loader from "../shared/Loader";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 
 const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
-  const [transitionId, setTransitionId] = useState("");
   const user = useAppSelector(currentUser);
+  const cart = useAppSelector(currentCart);
 
+  const [createOrderFn] = useCreateOrderMutation();
+
+  // Check for location state and navigate back if not present
   if (!location?.state) {
-    return navigate(-1);
+    navigate(-1);
+    return;
   }
 
   const handleSubmit = async (e: FormEvent) => {
     setLoading(true);
     e.preventDefault();
     if (!stripe || !elements) {
-      return setLoading(false);
+      setLoading(false);
+      return;
     }
 
     const card = elements.getElement(CardElement);
 
     if (card === null) {
-      return setLoading(false);
+      setLoading(false);
+      return;
     }
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -68,19 +77,44 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
         title: confirmError.message,
       });
     } else {
-      setTransitionId(paymentIntent.id);
+      console.log({ paymentIntent });
       if (paymentIntent.status === "succeeded") {
-        console.log({ paymentIntent });
+        const ordersData = {
+          ...cart.confirmOrders,
+          paymentInfo: paymentIntent.id,
+        };
+        createOrderFn(ordersData)
+          .unwrap()
+          .then((res) => {
+            if (res.statusCode === 201) {
+              dispatch(removeConfirmOrders());
+              dispatch(clearCart());
+              toast({
+                title: res?.message,
+                duration: 2000,
+              });
+              navigate("/");
+            }
+          })
+          .catch((error) => {
+            toast({
+              title: error?.data?.message,
+              duration: 2000,
+            });
+          });
       }
     }
+
+    setLoading(false);
   };
+
   return (
     <Container className="my-8 md:my-16">
       <div className="max-w-[30rem] mx-auto bg-muted dark:bg-white/90 border-2 border-theme p-6 rounded-lg">
         <form onSubmit={handleSubmit} className="flex flex-col justify-end">
-          <PaymentElement />
-          <Button variant="outline" className="mt-6">
-            Submit
+          <CardElement />
+          <Button variant="outline" className="mt-8" disabled={loading}>
+            {loading ? <Loader size={30} /> : "Pay"}
           </Button>
         </form>
       </div>

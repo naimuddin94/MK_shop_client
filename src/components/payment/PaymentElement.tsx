@@ -34,6 +34,15 @@ export default function App() {
   if (isLoading) {
     return <Loader size={150} />;
   }
+
+  if (!clientSecret) {
+    return (
+      <div className="min-h-[60vh] flex justify-center items-center">
+        <h1 className="text-3xl">Your stripe key not fetched successfully</h1>
+      </div>
+    );
+  }
+
   return (
     <Elements stripe={stripePromise} options={options}>
       <CheckoutForm clientSecret={clientSecret} />

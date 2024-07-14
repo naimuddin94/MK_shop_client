@@ -1,24 +1,12 @@
 import { toast } from "@/components/ui/use-toast";
 import { RootState } from "@/redux/store";
+import { TCartProduct, TCartState, TConfirmOrders } from "@/Types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export type TCartProduct = {
-  _id: string;
-  image: string;
-  name: string;
-  price: number;
-  quantity: number;
-  stock: number;
-};
-
-type TCartState = {
-  products: TCartProduct[];
-  totalAmount: number;
-};
 
 const initialState: TCartState = {
   products: [],
   totalAmount: 0,
+  confirmOrders: null,
 };
 
 const cartSlice = createSlice({
@@ -85,11 +73,23 @@ const cartSlice = createSlice({
       state.products = [];
       state.totalAmount = 0;
     },
+    addConfirmOrders: (state, action: PayloadAction<TConfirmOrders>) => {
+      state.confirmOrders = action.payload;
+    },
+    removeConfirmOrders: (state) => {
+      state.confirmOrders = null;
+    },
   },
 });
 
-export const { addToCart, decrementToCart, deleteProductFromCart, clearCart } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  decrementToCart,
+  deleteProductFromCart,
+  clearCart,
+  addConfirmOrders,
+  removeConfirmOrders,
+} = cartSlice.actions;
 
 export const currentCart = (state: RootState) => state.cart;
 

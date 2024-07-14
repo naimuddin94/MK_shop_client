@@ -3,13 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
 import { currentUser } from "@/redux/features/auth/authSlice";
 import {
+  addConfirmOrders,
   addToCart,
   currentCart,
   decrementToCart,
 } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { TConfirmOrders } from "@/Types";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { FieldValues, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -36,8 +39,20 @@ function CheckoutPage() {
     navigate("/payment", { state: { price } });
   };
 
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const onSubmit = async (data: FieldValues) => {
+    if (!data?.phone?.length || !data?.address?.length) {
+      return toast({
+        title: "Please add shipping information",
+        description:
+          "Shipping information is most important for proper rich orders correctly. We take care of our customers demands",
+        duration: 8000,
+      });
+    }
+
+    const confirmationOrderData = { ...data, orders } as TConfirmOrders;
+    dispatch(addConfirmOrders(confirmationOrderData));
+    reset();
+    handlePayment(total);
   };
 
   return (
@@ -52,7 +67,10 @@ function CheckoutPage() {
             {cart?.products?.map((product) => {
               const { _id, name, price, quantity, image, stock } = product;
               return (
-                <div className="flex justify-between items-center py-2">
+                <div
+                  key={_id}
+                  className="flex justify-between items-center py-2"
+                >
                   <div>
                     <h3 className="font-medium">{name}</h3>
                     <p className="text-gray-500">
@@ -278,6 +296,7 @@ function CheckoutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <h3 className="font-medium mb-2">Shipping Address</h3>
+              <p>{user?.name}</p>
               <p>{watch("phone")}</p>
               <p>{watch("address")}</p>
               <p>{watch("city")}</p>
@@ -312,19 +331,14 @@ function CheckoutPage() {
           <div className="mt-6">
             <Checkbox id="terms" className="mr-2 focus:ring-primary-500" />
             <Label htmlFor="terms" className="text-gray-500">
-              I agree to the{" "}
+              I agree to the
               <Link to="#" className="text-primary-500 underline">
                 terms and conditions
               </Link>
             </Label>
           </div>
           <div className="mt-6">
-            <Button
-              onClick={() => handlePayment(total)}
-              size="lg"
-              type="submit"
-              className="w-full"
-            >
+            <Button size="lg" type="submit" className="w-full">
               Make Payment
             </Button>
           </div>

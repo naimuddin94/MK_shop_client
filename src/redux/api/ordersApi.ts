@@ -9,7 +9,15 @@ const ordersApi = baseApi.injectEndpoints({
         body: { price },
       }),
     }),
+    createOrder: builder.mutation({
+      query: (orderData) => ({
+        url: "/carts",
+        method: "POST",
+        body: orderData,
+      }),
+      invalidatesTags: ["product", "order"],
+    }),
   }),
 });
 
-export const { useFetchPaymentKeyMutation } = ordersApi;
+export const { useFetchPaymentKeyMutation, useCreateOrderMutation } = ordersApi;
