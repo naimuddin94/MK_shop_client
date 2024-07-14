@@ -4,6 +4,7 @@ import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { useLogoutMutation } from "@/redux/features/auth/authApi";
 import { currentUser, removeUser } from "@/redux/features/auth/authSlice";
+import { currentCart } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 import { MdOutlineShoppingCart } from "react-icons/md";
@@ -15,6 +16,7 @@ import NavMenus from "./NavMenus";
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const user = useAppSelector(currentUser);
+  const cart = useAppSelector(currentCart);
   const dispatch = useAppDispatch();
 
   const [logoutFn] = useLogoutMutation();
@@ -69,7 +71,13 @@ const Navbar = () => {
                   <Button variant="ghost">
                     <MdOutlineShoppingCart size={20} />
                   </Button>
-                  <span className="absolute right-2">0</span>
+                  <span
+                    className={`absolute ${
+                      cart.products.length > 9 ? "right-0" : "right-2"
+                    }`}
+                  >
+                    {cart.products.length}
+                  </span>
                 </div>
               </Link>
               <ThemeToggle />

@@ -45,6 +45,7 @@ function Login() {
         if (res?.statusCode === 200) {
           const user = {
             userId: res?.data?._id,
+            name: res?.data?.name,
             role: res?.data?.role,
             email: res?.data?.email,
             image: res?.data?.image,

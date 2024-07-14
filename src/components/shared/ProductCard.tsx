@@ -5,12 +5,27 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
+import { addToCart } from "@/redux/features/cart/cartSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { TProduct } from "@/Types";
 import { Link } from "react-router-dom";
+import { toast } from "../ui/use-toast";
 import Rating from "./Rating";
 
 function ProductCard({ product }: { product: TProduct }) {
-  const { _id, name, image, description, brand, price, rating } = product;
+  const dispatch = useAppDispatch();
+
+  const { _id, name, image, description, brand, price, rating, stock } =
+    product;
+
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    dispatch(addToCart({ _id, image, name, price, stock, quantity: 1 }));
+    toast({
+      title: "Add to cart successfully",
+    });
+  };
 
   return (
     <Link to={`/product/${_id}`} className="flex flex-col h-full">
@@ -37,7 +52,9 @@ function ProductCard({ product }: { product: TProduct }) {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-2xl font-bold">${price}</span>
-            <Button variant="outline">Add to Cart</Button>
+            <Button type="submit" onClick={handleAddToCart} variant="outline">
+              Add to Cart
+            </Button>
           </div>
         </CardContent>
       </Card>

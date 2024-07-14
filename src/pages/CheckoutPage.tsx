@@ -3,56 +3,98 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { currentUser } from "@/redux/features/auth/authSlice";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+  addToCart,
+  currentCart,
+  decrementToCart,
+} from "@/redux/features/cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { FieldValues, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 
 function CheckoutPage() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const cart = useAppSelector(currentCart);
+  const user = useAppSelector(currentUser);
+
+  const discount = 0 * cart.totalAmount;
+  const tax = 0 * cart.totalAmount;
+  const total = cart.totalAmount - discount + tax;
+
+  const { register, handleSubmit, watch, reset } = useForm();
+
+  const orders = cart.products.map((item) => ({
+    product: item._id,
+    quantity: item.quantity,
+  }));
+
+  const handlePayment = (price: number) => {
+    navigate("/payment", { state: { price } });
+  };
+
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+  };
+
   return (
     <Container className="my-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-cols-1 md:grid-cols-2 gap-8"
+      >
         <div className="border rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
           <div className="divide-y">
-            <div className="flex justify-between items-center py-2">
-              <div>
-                <h3 className="font-medium">Acme T-Shirt</h3>
-                <p className="text-gray-500">Size: M, Color: Black</p>
-              </div>
-              <div className="flex items-center">
-                <button className="text-gray-500 hover:text-gray-700 mr-2">
-                  <MinusIcon className="w-5 h-5" />
-                </button>
-                <span>1</span>
-                <button className="text-gray-500 hover:text-gray-700 ml-2">
-                  <PlusIcon className="w-5 h-5" />
-                </button>
-              </div>
-              <div>$19.99</div>
-            </div>
-            <div className="flex justify-between items-center py-2">
-              <div>
-                <h3 className="font-medium">Acme Hoodie</h3>
-                <p className="text-gray-500">Size: L, Color: Navy</p>
-              </div>
-              <div className="flex items-center">
-                <button className="text-gray-500 hover:text-gray-700 mr-2">
-                  <MinusIcon className="w-5 h-5" />
-                </button>
-                <span>1</span>
-                <button className="text-gray-500 hover:text-gray-700 ml-2">
-                  <PlusIcon className="w-5 h-5" />
-                </button>
-              </div>
-              <div>$39.99</div>
-            </div>
+            {cart?.products?.map((product) => {
+              const { _id, name, price, quantity, image, stock } = product;
+              return (
+                <div className="flex justify-between items-center py-2">
+                  <div>
+                    <h3 className="font-medium">{name}</h3>
+                    <p className="text-gray-500">
+                      Material: Aluminum, Weight: 800g
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    <button className="text-gray-500 hover:text-gray-700 mr-2">
+                      <MinusIcon
+                        onClick={() =>
+                          dispatch(
+                            decrementToCart({
+                              _id,
+                            })
+                          )
+                        }
+                        className="w-5 h-5"
+                      />
+                    </button>
+                    <span>{quantity}</span>
+                    <button className="text-gray-500 hover:text-gray-700 ml-2">
+                      <PlusIcon
+                        onClick={() =>
+                          dispatch(
+                            addToCart({
+                              _id,
+                              name,
+                              image,
+                              price,
+                              stock,
+                              quantity: 1,
+                            })
+                          )
+                        }
+                        className="w-5 h-5"
+                      />
+                    </button>
+                  </div>
+                  <div>${price}</div>
+                </div>
+              );
+            })}
           </div>
           <div className="mt-4">
             <div className="flex justify-between items-center">
@@ -66,52 +108,56 @@ function CheckoutPage() {
                   placeholder="Enter promo code"
                   className="border-gray-300 rounded-md px-3 py-2 mr-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
-                <Button size="sm">Apply</Button>
+                <Button type="button" size="sm">
+                  Apply
+                </Button>
               </div>
             </div>
           </div>
           <div className="mt-6">
             <div className="flex justify-between items-center">
               <span>Subtotal</span>
-              <span>$59.98</span>
+              <span>${cart.totalAmount}</span>
             </div>
             <div className="flex justify-between items-center">
               <span>Shipping</span>
-              <span>$5.00</span>
+              <span>Free</span>
             </div>
             <div className="flex justify-between items-center">
               <span>Tax</span>
-              <span>$4.80</span>
+              <span>${tax}</span>
             </div>
             <div className="flex justify-between items-center font-bold text-lg">
               <span>Total</span>
-              <span>$69.78</span>
+              <span>${total}</span>
             </div>
           </div>
         </div>
         <div className="border rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold mb-4">Shipping Information</h2>
-          <form>
+          <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="name" className="block font-medium mb-1">
-                  Name
-                </label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Enter your name"
-                  className="border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                />
-              </div>
-              <div>
+              <div className="col-span-2">
                 <label htmlFor="address" className="block font-medium mb-1">
                   Address
                 </label>
                 <Input
+                  {...register("address")}
                   id="address"
                   type="text"
                   placeholder="Enter your address"
+                  className="border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="phone" className="block font-medium mb-1">
+                  Phone
+                </label>
+                <Input
+                  {...register("phone")}
+                  id="phone"
+                  type="text"
+                  placeholder="Enter your name"
                   className="border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
@@ -120,6 +166,7 @@ function CheckoutPage() {
                   City
                 </label>
                 <Input
+                  {...register("city")}
                   id="city"
                   type="text"
                   placeholder="Enter your city"
@@ -131,6 +178,7 @@ function CheckoutPage() {
                   State
                 </label>
                 <Input
+                  {...register("state")}
                   id="state"
                   type="text"
                   placeholder="Enter your state"
@@ -142,34 +190,17 @@ function CheckoutPage() {
                   Zip Code
                 </label>
                 <Input
+                  {...register("zip")}
                   id="zip"
                   type="text"
                   placeholder="Enter your zip code"
                   className="border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
-              <div>
-                <label htmlFor="country" className="block font-medium mb-1">
-                  Country
-                </label>
-                <div className="border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Country" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="bangladesh">Bangladesh</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
             </div>
-          </form>
+          </div>
         </div>
-        <div className="border rounded-lg shadow-md p-6">
+        {/* <div className="border rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold mb-4">Payment Method</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -241,37 +272,41 @@ function CheckoutPage() {
               </RadioGroup>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="border rounded-lg shadow-md p-6 col-span-1 md:col-span-2">
           <h2 className="text-2xl font-bold mb-4">Review and Place Order</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <h3 className="font-medium mb-2">Shipping Address</h3>
-              <p>John Doe</p>
-              <p>123 Main St.</p>
-              <p>Anytown, USA 12345</p>
+              <p>{watch("phone")}</p>
+              <p>{watch("address")}</p>
+              <p>{watch("city")}</p>
+              <p>
+                {watch("state")} {watch("zip")}
+              </p>
+              <p>{user?.email}</p>
             </div>
             <div>
               <h3 className="font-medium mb-2">Payment Method</h3>
-              <p>Visa ending in 1234</p>
+              <p className="text-green-500">Visa / Mastercard</p>
             </div>
           </div>
           <div className="mt-6">
             <div className="flex justify-between items-center">
               <span>Subtotal</span>
-              <span>$59.98</span>
+              <span>${cart.totalAmount}</span>
             </div>
             <div className="flex justify-between items-center">
               <span>Shipping</span>
-              <span>$5.00</span>
+              <span>Free</span>
             </div>
             <div className="flex justify-between items-center">
               <span>Tax</span>
-              <span>$4.80</span>
+              <span>${tax}</span>
             </div>
             <div className="flex justify-between items-center font-bold text-lg">
               <span>Total</span>
-              <span>$69.78</span>
+              <span>${total}</span>
             </div>
           </div>
           <div className="mt-6">
@@ -284,12 +319,17 @@ function CheckoutPage() {
             </Label>
           </div>
           <div className="mt-6">
-            <Button size="lg" className="w-full">
-              Place Order
+            <Button
+              onClick={() => handlePayment(total)}
+              size="lg"
+              type="submit"
+              className="w-full"
+            >
+              Make Payment
             </Button>
           </div>
         </div>
-      </div>
+      </form>
     </Container>
   );
 }

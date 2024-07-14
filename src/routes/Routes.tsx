@@ -1,8 +1,9 @@
 import MainLayout from "@/components/layout/MainLayout";
+import PaymentElement from "@/components/payment/PaymentElement";
 import About from "@/pages/About";
 import AddBrand from "@/pages/AddBrand";
 import AddProduct from "@/pages/AddProduct";
-import CartPage from "@/pages/Cart";
+import CartPage from "@/pages/CartPage";
 import CheckoutPage from "@/pages/CheckoutPage";
 import Contact from "@/pages/Contact";
 import Home from "@/pages/Home";
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/checkout",
         element: <CheckoutPage />,
+      },
+      {
+        path: "/payment",
+        element: <PaymentElement />,
       },
     ],
   },
