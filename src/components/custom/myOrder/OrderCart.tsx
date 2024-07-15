@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TFetchOrder } from "@/Types";
-import { rateDescription, rateHeading } from "@/utils/message";
+import { rateDescription, rateHeading } from "@/utils";
 import { PackageIcon, StarIcon } from "lucide-react";
 import { useState } from "react";
 

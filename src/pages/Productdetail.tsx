@@ -36,8 +36,18 @@ function ProductDetail() {
     return <Loader size={200} />;
   }
 
-  const { _id, name, brand, image, description, price, rating, stock } =
-    data.data;
+  const {
+    _id,
+    name,
+    brand,
+    image,
+    description,
+    price,
+    rating,
+    stock,
+    material,
+    weight,
+  } = data.data;
 
   const handleAddToCart = () => {
     dispatch(addToCart({ _id, image, name, price, stock, quantity: 1 }));
@@ -105,11 +115,11 @@ function ProductDetail() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="grid gap-1">
                       <p className="font-medium">Material</p>
-                      <p className="text-muted-foreground">Aluminum</p>
+                      <p className="text-muted-foreground">{material}</p>
                     </div>
                     <div className="grid gap-1">
                       <p className="font-medium">Weight</p>
-                      <p className="text-muted-foreground">800g</p>
+                      <p className="text-muted-foreground">{weight}</p>
                     </div>
                     <div className="grid gap-1">
                       <p className="font-medium">Brand</p>

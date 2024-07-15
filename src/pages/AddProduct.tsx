@@ -277,6 +277,40 @@ function AddProduct() {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-2">
                   <div className="grid gap-2">
+                    <Label htmlFor="material">Material</Label>
+                    <Input
+                      {...register("material", {
+                        required: "Material is required",
+                      })}
+                      id="material"
+                      placeholder="Enter product material"
+                      defaultValue={id ? productData?.data?.material : ""}
+                    />
+                    {errors.price && (
+                      <span className="text-theme text-xs">
+                        {errors.price.message as string}
+                      </span>
+                    )}
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="weight">Weight</Label>
+                    <Input
+                      {...register("weight", {
+                        required: "Weight is required",
+                      })}
+                      id="weight"
+                      placeholder="Product weight with grams"
+                      defaultValue={id ? productData?.data?.stock : ""}
+                    />
+                    {errors.stock && (
+                      <span className="text-theme text-xs">
+                        {errors.stock.message as string}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-2">
+                  <div className="grid gap-2">
                     <Label htmlFor="price">Price</Label>
                     <Input
                       {...register("price", {
