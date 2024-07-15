@@ -14,6 +14,7 @@ const authApi = baseApi.injectEndpoints({
         url: "/auth/signout",
         method: "POST",
       }),
+      invalidatesTags: ["order", "rating", "brand"],
     }),
   }),
 });

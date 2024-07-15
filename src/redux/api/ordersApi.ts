@@ -17,7 +17,18 @@ const ordersApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["product", "order"],
     }),
+    fetchOrders: builder.query({
+      query: () => ({
+        url: "/carts/my-orders",
+        method: "GET",
+      }),
+      providesTags: ["order"],
+    }),
   }),
 });
 
-export const { useFetchPaymentKeyMutation, useCreateOrderMutation } = ordersApi;
+export const {
+  useFetchPaymentKeyMutation,
+  useCreateOrderMutation,
+  useFetchOrdersQuery,
+} = ordersApi;

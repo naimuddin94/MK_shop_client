@@ -53,3 +53,39 @@ export type TCartState = {
   totalAmount: number;
   confirmOrders: TConfirmOrders | null;
 };
+
+type TOrderProduct = {
+  _id: string;
+  name: string;
+  image: string;
+  brand: string;
+  price: number;
+  rating: number;
+};
+
+export type TOrderDetail = {
+  _id: string;
+  user: string;
+  product: TOrderProduct;
+  quantity: number;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TFetchOrder = {
+  _id: string;
+  user: string;
+  orders: TOrderDetail[];
+  totalAmount: number;
+  address: string;
+  city: string;
+  state: string;
+  phone: string;
+  paymentInfo: string;
+  isConfirmed: boolean;
+  status: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
