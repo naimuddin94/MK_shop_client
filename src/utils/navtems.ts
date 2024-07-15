@@ -21,26 +21,32 @@ export const adminNavItems: navItem[] = [
       {
         title: "Add Brand",
         href: "/dashboard/add-brand",
-        description:
-          "A modal dialog that interrupts the user with important content and expects a response.",
+        description: "Add a new brand to your store.",
       },
       {
         title: "Add Product",
         href: "/dashboard/add-product",
-        description:
-          "For sighted users to preview content available behind a link.",
+        description: "Add new products to your inventory.",
       },
       {
-        title: "Carts",
-        href: "/dashboard/carts",
-        description:
-          "For sighted users to preview content available behind a link.",
+        title: "Manage Product",
+        href: "/dashboard/manage-product",
+        description: "Edit or remove existing products.",
       },
       {
-        title: "Ratings",
-        href: "/dashboard/ratings",
-        description:
-          "For sighted users to preview content available behind a link.",
+        title: "Orders",
+        href: "/dashboard/orders",
+        description: "View and manage all customer orders.",
+      },
+      {
+        title: "Reviews",
+        href: "/dashboard/reviews",
+        description: "Read and respond to customer reviews.",
+      },
+      {
+        title: "My Orders",
+        href: "/dashboard/my-orders",
+        description: "Track your order history and status.",
       },
     ],
   },
@@ -69,26 +75,22 @@ export const userNavItems: navItem[] = [
       {
         title: "Profile",
         href: "/dashboard/profile",
-        description:
-          "A modal dialog that interrupts the user with important content and expects a response.",
+        description: "View and edit your personal information.",
       },
       {
         title: "My Orders",
         href: "/dashboard/my-orders",
-        description:
-          "For sighted users to preview content available behind a link.",
+        description: "Track your order history and status.",
       },
       {
         title: "Carts",
         href: "/dashboard/carts",
-        description:
-          "For sighted users to preview content available behind a link.",
+        description: "View items in your shopping cart.",
       },
       {
         title: "Ratings",
         href: "/dashboard/ratings",
-        description:
-          "For sighted users to preview content available behind a link.",
+        description: "Rate and review purchased products.",
       },
     ],
   },

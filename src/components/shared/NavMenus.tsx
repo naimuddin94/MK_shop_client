@@ -20,6 +20,8 @@ const NavMenus = () => {
   useEffect(() => {
     if (user?.role === "admin") {
       setMenus(adminNavItems);
+    } else {
+      setMenus(userNavItems);
     }
   }, [user]);
   return (

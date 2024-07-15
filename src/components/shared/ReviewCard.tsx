@@ -6,6 +6,8 @@ import Rating from "./Rating";
 const ReviewCard = ({ ratingInfo }: { ratingInfo: TRating }) => {
   const { user, rating, feedback, updatedAt } = ratingInfo;
 
+  console.log(updatedAt);
+
   return (
     <div className="flex gap-4">
       <Avatar className="w-10 h-10 border">
@@ -17,7 +19,7 @@ const ReviewCard = ({ ratingInfo }: { ratingInfo: TRating }) => {
           <div className="grid gap-0.5 text-sm">
             <h2 className="font-semibold">{user.name}</h2>
             <time className="text-sm text-muted-foreground">
-              {moment(updatedAt).endOf("day").fromNow()}
+              {moment(updatedAt).fromNow()}
             </time>
           </div>
           <Rating rating={rating} />

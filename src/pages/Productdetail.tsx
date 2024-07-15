@@ -5,10 +5,12 @@ import Rating from "@/components/shared/Rating";
 import ReviewCard from "@/components/shared/ReviewCard";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/components/ui/use-toast";
 import { useFetchSingleProductQuery } from "@/redux/api/productApi";
 import { useFetchRatingsByProductIdQuery } from "@/redux/api/ratingApi";
 import { currentUser } from "@/redux/features/auth/authSlice";
-import { useAppSelector } from "@/redux/hooks";
+import { addToCart } from "@/redux/features/cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { TRating } from "@/Types";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -16,13 +18,14 @@ import { Link, useParams } from "react-router-dom";
 function ProductDetail() {
   const { id } = useParams();
   const user = useAppSelector(currentUser);
+  const dispatch = useAppDispatch();
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useFetchSingleProductQuery(id);
   const { data: ratingData, isLoading: ratingLoading } =
     useFetchRatingsByProductIdQuery({
       id,
-      param: { page, limit: 2, sort: "-updateAt" },
+      param: { page, limit: 2, sort: "-updatedAt" },
     });
 
   const handlePageChange = (page: number) => {
@@ -33,7 +36,15 @@ function ProductDetail() {
     return <Loader size={200} />;
   }
 
-  const { _id, name, brand, image, description, price, rating } = data.data;
+  const { _id, name, brand, image, description, price, rating, stock } =
+    data.data;
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({ _id, image, name, price, stock, quantity: 1 }));
+    toast({
+      title: "Add to cart successfully",
+    });
+  };
 
   return (
     <Container className="py-8 max-w-6xl">
@@ -60,7 +71,12 @@ function ProductDetail() {
 
             {user?.role == "admin" ? (
               <div className="space-x-4">
-                <Button size="lg" variant="outline" className="mt-4">
+                <Button
+                  size="lg"
+                  onClick={handleAddToCart}
+                  variant="outline"
+                  className="mt-4"
+                >
                   Add to Cart
                 </Button>
                 <Link to={`/dashboard/edit-product/${_id}`}>
@@ -70,7 +86,7 @@ function ProductDetail() {
                 </Link>
               </div>
             ) : (
-              <Button size="lg" className="mt-4">
+              <Button size="lg" onClick={handleAddToCart} className="mt-4">
                 Add to Cart
               </Button>
             )}
