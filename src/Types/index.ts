@@ -8,8 +8,13 @@ export type TProduct = {
   _id: string;
   name: string;
   image: string;
-  brand: TBrand;
+  brand: {
+    name: string;
+    origin: string;
+  };
   description: string;
+  material: string;
+  weight: string;
   rating: number;
   price: number;
   stock: number;

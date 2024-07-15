@@ -1,5 +1,6 @@
 import Container from "@/components/shared/Container";
 import Loader from "@/components/shared/Loader";
+import NoDataFound from "@/components/shared/NoDataFound";
 import PaginationComponent from "@/components/shared/PaginationComponent";
 import ProductCard from "@/components/shared/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -149,9 +150,13 @@ function Products() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {data?.data?.result?.map((product: TProduct) => (
-          <ProductCard product={product} key={product._id} />
-        ))}
+        {data?.data?.result?.length > 0 ? (
+          data?.data?.result?.map((product: TProduct) => (
+            <ProductCard product={product} key={product._id} />
+          ))
+        ) : (
+          <NoDataFound />
+        )}
       </div>
       {data?.data?.meta?.total > 8 && (
         <div className="flex justify-center mt-8">
