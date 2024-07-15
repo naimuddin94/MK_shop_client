@@ -8,6 +8,7 @@ import CheckoutPage from "@/pages/CheckoutPage";
 import Contact from "@/pages/Contact";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
+import ManageProduct from "@/pages/MangeProduct";
 import MyOrders from "@/pages/MyOrders";
 import ProductDetail from "@/pages/Productdetail";
 import Products from "@/pages/Products";
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/add-product",
         element: <AddProduct />,
+      },
+      {
+        path: "/dashboard/manage-product",
+        element: <ManageProduct />,
       },
       {
         path: "/dashboard/edit-product/:id",

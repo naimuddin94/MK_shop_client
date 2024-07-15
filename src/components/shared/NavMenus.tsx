@@ -25,9 +25,9 @@ const NavMenus = () => {
     }
   }, [user]);
   return (
-    <ul className="hidden md:flex items-center gap-5 py-3">
+    <ul className="items-center gap-5 py-3">
       <NavigationMenu>
-        <NavigationMenuItem>
+        <NavigationMenuItem className="flex flex-col lg:flex-row">
           {menus?.map((menu) => {
             if (menu.href) {
               return (
