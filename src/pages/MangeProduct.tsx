@@ -15,6 +15,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import {
   Table,
@@ -42,14 +49,16 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function ManageProduct() {
+  const [limit, setLimit] = useState("8");
   const [searchTerm, setSearchTerm] = useState("");
   const [sort, setSort] = useState("stock");
   const [page, setPage] = useState(1);
   const { data, isLoading } = useFetchProductsQuery({
     page,
-    limit: 8,
+    limit: Number(limit),
     sort,
     searchTerm,
+    fields: "name,description,stock,price",
   });
 
   const [deleteProductFn] = useDeleteProductsMutation();
@@ -201,6 +210,19 @@ function ManageProduct() {
                 />
                 Clear
               </Button>
+              <Select
+                onValueChange={(value) => setLimit(value)}
+                value={limit.toString()}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select brand" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="8">8</SelectItem>
+                  <SelectItem value="16">16</SelectItem>
+                  <SelectItem value="32">32</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </header>
