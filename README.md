@@ -20,7 +20,7 @@ I have developed a robust mechanical keyboard ecommerce platform showcasing my e
 - This project not only demonstrates my technical proficiency in web development, including React and ShadCN, but also highlights my ability to create robust, user-centric ecommerce solutions. It embodies my commitment to delivering high-quality, feature-rich applications that meet both user and business needs effectively.
 
 ## Project Link
-[![Live Link](https://img.shields.io/badge/API-Live-brightgreen?style=for-the-badge)](https://keeb-keyboard.vercel.app/)
+[![Live Link](https://img.shields.io/badge/Frontend-Live-brightgreen?style=for-the-badge)](https://keeb-keyboard.vercel.app/)
 
 ## Run Locally
 
