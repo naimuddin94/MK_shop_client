@@ -65,3 +65,12 @@ Build project
 
 ![Diagram](https://res.cloudinary.com/dxoncladp/image/upload/v1721145024/Mechanical_Keyboard_Shop_f8e22f.png)
 
+## Contact
+
+If you have any questions or suggestions, feel free to reach out to me.
+
+[![Connect on LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/iamnaimuddin)
+
+---
+
+This frontend project not only showcases my expertise in frontend development, utilizing technologies like React and ShadCN, but also demonstrates my commitment to delivering user-friendly and engaging web applications that meet modern standards and user expectations effectively.
