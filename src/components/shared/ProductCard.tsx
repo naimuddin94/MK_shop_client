@@ -8,6 +8,7 @@ import {
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { TProduct } from "@/Types";
+import { truncate } from "@/utils";
 import { Link } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import Rating from "./Rating";
@@ -43,8 +44,8 @@ function ProductCard({ product }: { product: TProduct }) {
               <Rating rating={rating} />
             </div>
             <CardTitle className="text-xl font-bold">{name}</CardTitle>
-            <CardDescription className="text-muted-foreground">
-              {description.slice(0, 50)}
+            <CardDescription className="text-muted-foreground text-justify">
+              {truncate(description, 7)}
             </CardDescription>
             <CardTitle className="text-md font-semibold">
               {brand.name}

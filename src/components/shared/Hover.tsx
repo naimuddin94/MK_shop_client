@@ -17,7 +17,7 @@ function Hover({ children, image, heading, description }: THoverProps) {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
-      <HoverCardContent className="w-80">
+      <HoverCardContent className="w-80 max-w-fit">
         <div className="flex justify-between space-x-4">
           {image && (
             <Avatar>

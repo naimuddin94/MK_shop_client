@@ -1,6 +1,21 @@
+import AlertModel from "@/components/shared/AlertModel";
 import Container from "@/components/shared/Container";
+import Loader from "@/components/shared/Loader";
+import PaginationComponent from "@/components/shared/PaginationComponent";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import {
   Table,
   TableBody,
@@ -9,61 +24,185 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FilePenIcon, TrashIcon } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+import {
+  useDeleteProductsMutation,
+  useFetchProductsQuery,
+} from "@/redux/api/productApi";
+import { TProduct } from "@/Types";
+import { truncate } from "@/utils";
+import {
+  FilePenIcon,
+  FilterIcon,
+  FilterXIcon,
+  ListOrderedIcon,
+  TrashIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function ManageProduct() {
-  const [products] = useState([
-    {
-      id: 1,
-      name: "Acme Wireless Headphones",
-      description: "High-quality wireless headphones with noise cancellation",
-      price: 99.99,
-      inventory: 50,
-      status: "In Stock",
-    },
-    {
-      id: 2,
-      name: "Gizmo Smart Lamp",
-      description: "Adjustable smart lamp with voice control",
-      price: 49.99,
-      inventory: 25,
-      status: "Out of Stock",
-    },
-    {
-      id: 3,
-      name: "Techno Fitness Tracker",
-      description: "Advanced fitness tracker with heart rate monitoring",
-      price: 79.99,
-      inventory: 75,
-      status: "In Stock",
-    },
-    {
-      id: 4,
-      name: "Lumina LED Bulbs",
-      description: "Energy-efficient LED bulbs with adjustable brightness",
-      price: 12.99,
-      inventory: 100,
-      status: "In Stock",
-    },
-    {
-      id: 5,
-      name: "Aqua Water Purifier",
-      description: "Compact water purifier with advanced filtration",
-      price: 59.99,
-      inventory: 30,
-      status: "Out of Stock",
-    },
-  ]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sort, setSort] = useState("stock");
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useFetchProductsQuery({
+    page,
+    limit: 8,
+    sort,
+    searchTerm,
+  });
+
+  const [deleteProductFn] = useDeleteProductsMutation();
+
+  const handleBrandDelete = async (productId: string) => {
+    await deleteProductFn(productId)
+      .unwrap()
+      .then((res) => {
+        if (res?.statusCode === 200) {
+          toast({
+            title: res?.message,
+            duration: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: error?.data?.message,
+          duration: 2000,
+        });
+      });
+  };
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  };
+
+  const handleSort = (sort: string) => {
+    setSort(sort);
+  };
+
+  const handleClearFilter = () => {
+    setSort("stock");
+    setSearchTerm("");
+  };
+
+  if (isLoading) {
+    return <Loader size={200} />;
+  }
+
   return (
     <Container>
       <div className="flex flex-col h-full my-8">
-        <header className="bg-background border-b pb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Product Management</h1>
-          <Link to="/dashboard/add-product">
-            <Button size="sm">Create New Product</Button>
-          </Link>
+        <header>
+          <div className="bg-background border-b pb-4 flex items-center justify-between">
+            <h1 className="text-2xl font-bold">Product Management</h1>
+            <Link to="/dashboard/add-product">
+              <Button size="sm">Create New Product</Button>
+            </Link>
+          </div>
+          <div className="flex flex-col md:flex-row items-center justify-between my-5">
+            <div className="w-full md:w-1/2 mb-4 md:mb-0 flex gap-4">
+              <Input
+                type="search"
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div className="flex items-center gap-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline">
+                    <FilterIcon className="h-4 w-4 mr-2" />
+                    Filter
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-64 p-5">
+                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <div className="grid gap-2">
+                    <div>
+                      <Label htmlFor="category">Category</Label>
+                      <div className="grid gap-2">
+                        <Label className="flex items-center gap-2">
+                          <Checkbox value="Electronics" />
+                          Electronics
+                        </Label>
+                        <Label className="flex items-center gap-2">
+                          <Checkbox value="Bags" />
+                          Bags
+                        </Label>
+                        <Label className="flex items-center gap-2">
+                          <Checkbox value="Outdoor" />
+                          Outdoor
+                        </Label>
+                        <Label className="flex items-center gap-2">
+                          <Checkbox value="Accessories" />
+                          Accessories
+                        </Label>
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="price-range">Price Range</Label>
+                      <div className="w-full" />
+                    </div>
+                    <div>
+                      <Label htmlFor="rating">Rating</Label>
+                      <Slider
+                        id="rating"
+                        min={0}
+                        max={5}
+                        step={0.5}
+                        //   value={[filters.rating]}
+                        //   onValueChange={(value) =>
+                        //     setFilters({ ...filters, rating: value })
+                        //   }
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline">
+                    <ListOrderedIcon className="h-4 w-4 mr-2" />
+                    Sort
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-64">
+                  <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuCheckboxItem
+                    onClick={() => handleSort("-createdAt")}
+                  >
+                    Latest
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem onClick={() => handleSort("price")}>
+                    Price: Low to High
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    onClick={() => handleSort("-price")}
+                  >
+                    Price: High to Low
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    onClick={() => handleSort("-rating")}
+                  >
+                    Rating: High to Low
+                  </DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button variant="outline">
+                <FilterXIcon
+                  onClick={handleClearFilter}
+                  className="h-4 w-4 mr-2"
+                />
+                Clear
+              </Button>
+            </div>
+          </div>
         </header>
         <main className="flex-1 overflow-auto pt-5">
           <div className="border rounded-lg overflow-hidden">
@@ -79,41 +218,54 @@ function ManageProduct() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products.map((product) => (
-                  <TableRow key={product.id}>
+                {data?.data?.result?.map((product: TProduct) => (
+                  <TableRow key={product._id}>
                     <TableCell className="font-medium">
                       {product.name}
                     </TableCell>
-                    <TableCell>{product.description}</TableCell>
+
+                    <TableCell>{truncate(product.description, 6)}</TableCell>
                     <TableCell>${product.price.toFixed(2)}</TableCell>
-                    <TableCell>{product.inventory}</TableCell>
+                    <TableCell>{product.stock}</TableCell>
                     <TableCell>
                       <Badge
-                        variant={
-                          product.status === "In Stock"
-                            ? "default"
-                            : "destructive"
-                        }
+                        variant={product.stock > 0 ? "default" : "destructive"}
                       >
-                        {product.status}
+                        {product.stock > 0 ? "in stock" : "stock out"}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Button size="icon" variant="outline">
-                          <FilePenIcon className="h-4 w-4" />
-                          <span className="sr-only">Edit</span>
-                        </Button>
-                        <Button size="icon" variant="outline">
-                          <TrashIcon className="h-4 w-4" />
-                          <span className="sr-only">Delete</span>
-                        </Button>
+                        <Link to={`/dashboard/edit-product/${product._id}`}>
+                          <Button size="icon" variant="outline">
+                            <FilePenIcon className="h-4 w-4" />
+                            <span className="sr-only">Edit</span>
+                          </Button>
+                        </Link>
+                        <AlertModel
+                          onConfirm={() => handleBrandDelete(product._id)}
+                        >
+                          <Button size="icon" variant="outline">
+                            <TrashIcon className="h-4 w-4" />
+                            <span className="sr-only">Delete</span>
+                          </Button>
+                        </AlertModel>
                       </div>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+            <div>
+              {data?.data?.meta?.total > 8 && (
+                <div className="flex justify-center my-8">
+                  <PaginationComponent
+                    meta={data?.data?.meta}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </main>
       </div>
