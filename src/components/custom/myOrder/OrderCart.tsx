@@ -17,7 +17,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TFetchOrder } from "@/Types";
-import { rateDescription, rateHeading } from "@/utils";
 import { PackageIcon, StarIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -63,8 +62,8 @@ const OrderCart = ({ cart, index }: TOderCardProps) => {
                           <>
                             <Hover
                               image={order.product.image}
-                              heading={rateHeading}
-                              description={rateDescription}
+                              heading="Provide your feedback !"
+                              description="Your feedback is very helpful for us to improve our product and management system."
                             >
                               <Button
                                 onClick={() => {

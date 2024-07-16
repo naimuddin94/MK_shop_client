@@ -34,7 +34,9 @@ function AddBrand() {
   } = useForm();
 
   const [addBrandFn] = useAddBrandMutation();
-  const { data, isLoading } = useFetchBrandsQuery({ page, limit: 5 });
+  const { data, isLoading } = useFetchBrandsQuery({
+    param: { page, limit: 5 },
+  });
 
   const onSubmit = async (data: FieldValues) => {
     await addBrandFn(data)

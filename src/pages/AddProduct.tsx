@@ -63,7 +63,6 @@ function AddProduct() {
 
   const [addProductFn] = useAddProductMutation();
   const [updateProductFn] = useUpdateProductMutation();
-  const { data, isLoading: BrandLoading } = useFetchBrandsQuery({});
 
   // Discard form
   const handleDiscard = () => {
@@ -75,12 +74,14 @@ function AddProduct() {
 
   useEffect(() => {
     if (id) {
-      setBrand(productData?.data?.brand?._id);
+      setBrand(productData?.data?.brand?.name);
       setPreviewUrl(productData?.data?.image);
     } else {
       handleDiscard();
     }
   }, [id]);
+
+  const { data, isLoading: BrandLoading } = useFetchBrandsQuery({});
 
   // Save a new product to the database
   const onSubmit = async (data: FieldValues) => {
@@ -268,7 +269,7 @@ function AddProduct() {
                     </SelectTrigger>
                     <SelectContent>
                       {data?.data?.result?.map((brand: TBrand) => (
-                        <SelectItem key={brand._id} value={brand._id}>
+                        <SelectItem key={brand._id} value={brand.name}>
                           {brand.name}
                         </SelectItem>
                       ))}
@@ -300,7 +301,7 @@ function AddProduct() {
                       })}
                       id="weight"
                       placeholder="Product weight with grams"
-                      defaultValue={id ? productData?.data?.stock : ""}
+                      defaultValue={id ? productData?.data?.weight : ""}
                     />
                     {errors.stock && (
                       <span className="text-theme text-xs">

@@ -3,14 +3,13 @@ import { baseApi } from "@/redux/api/baseApi";
 const brandApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     fetchBrands: builder.query({
-      query: ({ page, limit }) => {
+      query: ({ param }) => {
         const params = new URLSearchParams();
 
-        if (page) {
-          params.append("page", page);
-          params.append("limit", limit);
-          params.append("sort", "-createdAt");
+        for (const key in param) {
+          params.append(key, param[key]);
         }
+
         return {
           url: "/brands",
           method: "GET",
@@ -18,6 +17,14 @@ const brandApi = baseApi.injectEndpoints({
         };
       },
       providesTags: ["brand"],
+    }),
+    fetchSingBrandByName: builder.query({
+      query: (name) => {
+        return {
+          url: `/brands/fetch-by-name/${name}`,
+          method: "GET",
+        };
+      },
     }),
     addBrand: builder.mutation({
       query: (newBrand) => ({
@@ -41,4 +48,5 @@ export const {
   useFetchBrandsQuery,
   useAddBrandMutation,
   useDeleteBrandMutation,
+  useFetchSingBrandByNameQuery,
 } = brandApi;

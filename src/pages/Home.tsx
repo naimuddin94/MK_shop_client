@@ -1,3 +1,4 @@
+import CustomerReviews from "@/components/custom/home/CustomerReviews";
 import FeatureBrands from "@/components/custom/home/FeatureBrands";
 import Hero from "@/components/custom/home/Hero";
 import HomeProduct from "@/components/custom/home/HomeProduct";
@@ -8,6 +9,7 @@ const Home = () => {
       <Hero />
       <HomeProduct />
       <FeatureBrands />
+      <CustomerReviews/>
     </div>
   );
 };

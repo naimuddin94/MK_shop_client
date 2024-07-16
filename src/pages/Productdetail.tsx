@@ -137,7 +137,15 @@ function ProductDetail() {
               <div className="grid gap-4 py-6">
                 <div className="grid gap-2">
                   <h2 className="text-xl font-bold">Product Description</h2>
-                  <p className="text-muted-foreground">{description}</p>
+                  {description
+                    .split("\n")
+                    .map((paragraph: string, index: number) => (
+                      <div key={index}>
+                        <p className="text-muted-foreground pb-5">
+                          {paragraph}
+                        </p>
+                      </div>
+                    ))}
                 </div>
               </div>
             </TabsContent>

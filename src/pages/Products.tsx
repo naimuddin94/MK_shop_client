@@ -68,7 +68,7 @@ function Products() {
                 Filter
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64">
+            <DropdownMenuContent align="end" className="w-64 p-5">
               <DropdownMenuLabel>Filter by</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="grid gap-2">
@@ -124,6 +124,11 @@ function Products() {
             <DropdownMenuContent align="end" className="w-64">
               <DropdownMenuLabel>Sort by</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem
+                onClick={() => handleSort("-createdAt")}
+              >
+                Latest
+              </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem onClick={() => handleSort("price")}>
                 Price: Low to High
               </DropdownMenuCheckboxItem>
