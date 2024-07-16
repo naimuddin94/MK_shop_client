@@ -34,8 +34,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  // localhost:5000/api/v1/auth/refresh-token
-
   if (result?.error?.status === 401) {
     const res = await fetch(
       "https://mechanical-keyboard-shop-server-two.vercel.app/api/v1/auth/refresh-token",
