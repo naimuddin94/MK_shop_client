@@ -14,6 +14,7 @@ import ProductDetail from "@/pages/Productdetail";
 import Products from "@/pages/Products";
 import Register from "@/pages/Register";
 import { createBrowserRouter } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -38,23 +39,43 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/my-orders",
-        element: <MyOrders />,
+        element: (
+          <ProtectedRoute roles={["admin", "user"]}>
+            <MyOrders />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboard/add-product",
-        element: <AddProduct />,
+        element: (
+          <ProtectedRoute roles={["admin"]}>
+            <AddProduct />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboard/manage-product",
-        element: <ManageProduct />,
+        element: (
+          <ProtectedRoute roles={["admin"]}>
+            <ManageProduct />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboard/edit-product/:id",
-        element: <AddProduct />,
+        element: (
+          <ProtectedRoute roles={["admin"]}>
+            <AddProduct />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboard/add-brand",
-        element: <AddBrand />,
+        element: (
+          <ProtectedRoute roles={["admin"]}>
+            <AddBrand />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/product/:id",
@@ -62,15 +83,27 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/carts",
-        element: <CartPage />,
+        element: (
+          <ProtectedRoute roles={["admin", "user"]}>
+            <CartPage />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboard/checkout",
-        element: <CheckoutPage />,
+        element: (
+          <ProtectedRoute roles={["admin", "user"]}>
+            <CheckoutPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/payment",
-        element: <PaymentElement />,
+        element: (
+          <ProtectedRoute roles={["admin", "user"]}>
+            <PaymentElement />,
+          </ProtectedRoute>
+        ),
       },
     ],
   },

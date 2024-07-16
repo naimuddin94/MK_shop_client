@@ -5,16 +5,19 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
+import { currentToken } from "@/redux/features/auth/authSlice";
 import { addToCart } from "@/redux/features/cart/cartSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { TProduct } from "@/Types";
 import { truncate } from "@/utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import Rating from "./Rating";
 
 function ProductCard({ product }: { product: TProduct }) {
   const dispatch = useAppDispatch();
+  const token = useAppSelector(currentToken);
+  const navigate = useNavigate();
 
   const { _id, name, image, description, brand, price, rating, stock } =
     product;
@@ -22,6 +25,9 @@ function ProductCard({ product }: { product: TProduct }) {
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
+    if (!token) {
+      return navigate("/login");
+    }
     dispatch(addToCart({ _id, image, name, price, stock, quantity: 1 }));
     toast({
       title: "Add to cart successfully",

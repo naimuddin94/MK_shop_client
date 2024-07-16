@@ -8,16 +8,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
 import { useFetchSingleProductQuery } from "@/redux/api/productApi";
 import { useFetchRatingsByProductIdQuery } from "@/redux/api/ratingApi";
-import { currentUser } from "@/redux/features/auth/authSlice";
+import { currentToken, currentUser } from "@/redux/features/auth/authSlice";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { TRating } from "@/Types";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 function ProductDetail() {
   const { id } = useParams();
   const user = useAppSelector(currentUser);
+  const token = useAppSelector(currentToken);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [page, setPage] = useState(1);
 
@@ -50,6 +52,9 @@ function ProductDetail() {
   } = data.data;
 
   const handleAddToCart = () => {
+    if (!token) {
+      return navigate("/login");
+    }
     dispatch(addToCart({ _id, image, name, price, stock, quantity: 1 }));
     toast({
       title: "Add to cart successfully",

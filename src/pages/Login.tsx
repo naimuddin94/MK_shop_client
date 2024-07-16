@@ -18,23 +18,20 @@ import { useAppDispatch } from "@/redux/hooks";
 import { LucideEye, LucideEyeOff } from "lucide-react";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
+  const { state } = useLocation();
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm({
-    defaultValues: {
-      email: "smith@gmail.com",
-      password: "password123",
-    },
-  });
+  } = useForm();
 
   const [loginFn] = useLoginMutation();
 
@@ -53,7 +50,7 @@ function Login() {
           const token = res?.token;
 
           dispatch(setUser({ user, token }));
-          navigate("/");
+          navigate(state ? state : "/");
           toast({
             title: res?.message,
             duration: 2000,
