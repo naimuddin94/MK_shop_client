@@ -1,30 +1,67 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🔗 Mechanical Keyboard Shop
 
-Currently, two official plugins are available:
+I have developed a robust mechanical keyboard ecommerce platform showcasing my expertise in full-stack web development. This platform is designed to offer a seamless shopping experience for enthusiasts and professionals alike, featuring a comprehensive array of functionalities:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Cart System: The integrated cart system allows users to effortlessly add desired products, review selections, and proceed to checkout with ease.
 
-## Expanding the ESLint configuration
+- Payment Integration (Stripe): Secure Stripe payment integration ensures smooth and reliable transaction processing, offering users a hassle-free purchasing experience.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Review and Rating System: Enhancing user interaction, the platform includes a dynamic review and rating system. Users can provide feedback, share experiences, and make informed decisions based on community reviews.
 
-- Configure the top-level `parserOptions` property like this:
+- Admin Product Management: Administrators benefit from a robust product management system, enabling efficient management of inventory, product details, pricing, and availability. This ensures that the platform maintains an up-to-date and organized product catalog.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+- Role-Based Handling: The implementation of role-based access control ensures that each user group—whether customer, admin. This feature enhances security and streamlines user interaction based on predefined roles.
+
+- User-Friendly Interface: The platform boasts an intuitive and responsive user interface, optimizing user experience across devices. From product browsing to checkout, the interface is designed for seamless navigation and usability.
+
+- Security and Scalability: Built with a focus on security best practices, the platform ensures data protection and integrity throughout user interactions and transactions. It is also designed with scalability in mind, capable of handling increased traffic and growing product catalog demands.
+
+- This project not only demonstrates my technical proficiency in web development, including React and ShadCN, but also highlights my ability to create robust, user-centric ecommerce solutions. It embodies my commitment to delivering high-quality, feature-rich applications that meet both user and business needs effectively.
+
+## Project Link
+[![Live Link](https://img.shields.io/badge/API-Live-brightgreen?style=for-the-badge)](https://keeb-keyboard.vercel.app/)
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/naimuddin94/MK_shop_client.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Go to the project directory
+
+```bash
+  cd MK_shop_client
+```
+
+Set environment variables fllowing env.exaple file
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server development
+
+```bash
+  npm run dev
+```
+
+Build project
+
+```bash
+  npm run build
+```
+
+
+## 🔗 Documentation
+[![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)](https://documenter.getpostman.com/view/34122341/2sA3kRJ3gC)
+
+
+## Database Diagram
+
+![Diagram](https://res.cloudinary.com/dxoncladp/image/upload/v1721145024/Mechanical_Keyboard_Shop_f8e22f.png)
+
