@@ -42,6 +42,14 @@ export const featureCardData = [
   },
 ];
 
+export const cartStatus = [
+  "processing",
+  "cancel",
+  "shipped",
+  "delivered",
+  "received",
+] as const;
+
 export function truncate(paragraph: string, wordLimit: number) {
   const words = paragraph.split(" ");
 

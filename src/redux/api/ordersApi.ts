@@ -24,6 +24,29 @@ const ordersApi = baseApi.injectEndpoints({
       }),
       providesTags: ["order"],
     }),
+    fetchAllOrders: builder.query({
+      query: (param) => {
+        const params = new URLSearchParams();
+
+        for (const key in param) {
+          params.append(key, param[key]);
+        }
+
+        return {
+          url: "/carts",
+          method: "GET",
+          params: params,
+        };
+      },
+      providesTags: ["orders"],
+    }),
+    changeCartStatus: builder.mutation({
+      query: ({ cartId, status }) => ({
+        url: `/carts/change-status/${cartId}`,
+        method: "PATCH",
+        body: { status },
+      }),
+    }),
   }),
 });
 
@@ -31,4 +54,6 @@ export const {
   useFetchPaymentKeyMutation,
   useCreateOrderMutation,
   useFetchOrdersQuery,
+  useFetchAllOrdersQuery,
+  useChangeCartStatusMutation,
 } = ordersApi;

@@ -8,6 +8,7 @@ import CheckoutPage from "@/pages/CheckoutPage";
 import Contact from "@/pages/Contact";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
+import ManageOrders from "@/pages/ManageOrders";
 import ManageProduct from "@/pages/MangeProduct";
 import MyOrders from "@/pages/MyOrders";
 import ProductDetail from "@/pages/Productdetail";
@@ -58,6 +59,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute roles={["admin"]}>
             <ManageProduct />,
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/dashboard/orders",
+        element: (
+          <ProtectedRoute roles={["admin"]}>
+            <ManageOrders />,
           </ProtectedRoute>
         ),
       },
