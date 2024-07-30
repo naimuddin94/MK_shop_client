@@ -11,6 +11,7 @@ import Login from "@/pages/Login";
 import ManageOrders from "@/pages/ManageOrders";
 import ManageProduct from "@/pages/MangeProduct";
 import MyOrders from "@/pages/MyOrders";
+import NotFound from "@/pages/NotFound";
 import ProductDetail from "@/pages/Productdetail";
 import Products from "@/pages/Products";
 import Register from "@/pages/Register";
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <NotFound />,
     children: [
       {
         index: true,
