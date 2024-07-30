@@ -35,7 +35,7 @@ function AddBrand() {
 
   const [addBrandFn] = useAddBrandMutation();
   const { data, isLoading } = useFetchBrandsQuery({
-    param: { page, limit: 5 },
+    param: { page, limit: 5, sort: "name" },
   });
 
   const onSubmit = async (data: FieldValues) => {
